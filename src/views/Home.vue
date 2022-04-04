@@ -10,24 +10,31 @@
 		{ id: 5, name: "Lulle", age: 12, photo: "/images/cat5.jpg" },
 	])
 
-	let swipe = e => cards.pop()
+	let like = ref(false),
+		disabled = ref(false)
+
+	let swipe = status => {
+		cards.pop()
+		like.value = status
+		disabled.value = true
+	}
 </script>
 
 <template>
-	<div class="relative">
-		<card v-for="card in cards" :key="card.id" :card="card" @click="swipe"></card>
-	</div>
+	<transition-group class="relative" tag="div" :leave-to-class="like ? '!translate-x-full rotate-12' : '!-translate-x-full -rotate-12'" @after-leave="disabled = false">
+		<card v-for="card in cards" :key="card.id" :card="card" @swipe="swipe"></card>
+	</transition-group>
 	<div class="flex justify-between p-4 border-t">
 		<button class="btn text-[#f5b748]">
 			<i class="fa-solid fa-reply"></i>
 		</button>
-		<button class="btn text-[#ec5e6f]">
+		<button class="btn text-[#ec5e6f]" @click="swipe(false)" :disabled="disabled">
 			<i class="fa-solid fa-times"></i>
 		</button>
 		<button class="btn text-[#62b4f9]">
 			<i class="fa-solid fa-star"></i>
 		</button>
-		<button class="btn text-[#76e2b3]">
+		<button class="btn text-[#76e2b3]" @click="swipe(true)" :disabled="disabled">
 			<i class="fa-solid fa-heart"></i>
 		</button>
 		<button class="btn text-[#915dd1]">
