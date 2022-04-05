@@ -3,10 +3,22 @@
 	import Login from "./components/Login.vue"
 	import { useStore } from "vuex"
 	import { getAuth, onAuthStateChanged } from "firebase/auth"
+	import { getFirestore, doc, setDoc } from "firebase/firestore"
 
 	const store = useStore()
 
-	onAuthStateChanged(getAuth(), user => store.commit("auth", user))
+	onAuthStateChanged(getAuth(), user => {
+		if(user) {
+			setDoc(doc(getFirestore(), `users/${user.uid}`), {
+				id: user.uid,
+				name: user.displayName,
+				photo: user.photoURL,
+				age: 33
+			})
+		}
+
+		store.commit("auth", user)
+	})
 </script>
 
 <template>
