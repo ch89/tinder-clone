@@ -33,10 +33,15 @@
 	}
 
 	let check = e => {
-		getDoc(doc(db, `users/${card.value.id}/like/${store.state.user.uid}`))
-			.then(snapshot => show.value = snapshot.exists())
-			.catch(error => alert(error.message))
-			.finally(() => disabled.value = false)
+		if(status.value == "like") {
+			getDoc(doc(db, `users/${card.value.id}/like/${store.state.user.uid}`))
+				.then(snapshot => show.value = snapshot.exists())
+				.catch(error => alert(error.message))
+				.finally(() => disabled.value = false)
+		}
+		else {
+			disabled.value = false
+		}
 	}
 
 	const q = query(collection(db, "users"), where("id", "!=", store.state.user.uid))
@@ -47,7 +52,7 @@
 </script>
 
 <template>
-	<transition-group class="relative" tag="div" :name="status" @after-leave="status == 'like' ? check() : disabled = false">
+	<transition-group class="relative" tag="div" :name="status" @after-leave="check">
 		<card v-for="card in cards" :key="card.id" :card="card" @swipe="swipe"></card>
 	</transition-group>
 	<div class="flex justify-between p-4 border-t">

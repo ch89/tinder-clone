@@ -10,8 +10,8 @@
 
 <template>
 	<transition enter-from-class="opacity-0" leave-to-class="opacity-0">
-		<div class="absolute inset-0 bg-black/50 backdrop-blur-sm px-8 text-center grid grid-cols-2 gap-8 content-center transition" @click.self="emit('close')">
-			<img src="/images/match.webp" alt="Match" class="col-span-2">
+		<div class="absolute inset-0 bg-black/50 backdrop-blur-sm px-8 text-center grid grid-cols-2 gap-8 content-center transition">
+			<img src="/images/match.webp" alt="Match" class="col-span-2" @click="emit('close')">
 			<p class="text-white col-span-2">You and {{ card.name }} have liked each other.</p>
 			<img :src="store.state.user.photoURL" alt="Avatar" class="w-full aspect-square object-cover rounded-full border-4 border-white">
 			<img :src="card.photo" alt="Avatar" class="w-full aspect-square object-cover rounded-full border-4 border-white">
