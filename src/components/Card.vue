@@ -30,10 +30,10 @@
 					await nextTick()
 
 					if(x.value > width) {
-						emit("swipe", true)
+						emit("swipe", "like")
 					}
 					else if(x.value < -width) {
-						emit("swipe", false)
+						emit("swipe", "nope")
 					}
 					else {
 						x.value = 0
