@@ -35,7 +35,7 @@
 </script>
 
 <template>
-	<main v-if="user" class="grid grid-rows-[auto_1fr] h-full text-gray-700 overflow-hidden">
+	<main v-if="user" class="grid grid-rows-[auto_1fr] h-full text-gray-700 overflow-hidden relative">
 		<navbar></navbar>
 		<router-view></router-view>
 	</main>
@@ -48,5 +48,9 @@
 <style>
 	.tinder-btn {
 		@apply bg-gradient-to-r from-[#FD297B] to-[#FF655B] px-4 py-2 rounded-lg font-bold text-white;
+	}
+
+	.avatar {
+		@apply w-12 h-12 rounded-full object-cover;
 	}
 </style>

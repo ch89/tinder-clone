@@ -9,9 +9,11 @@
 		<button>
 			<img :src="photoURL" @click="signOut(getAuth())" class="w-8 h-8 rounded-full object-cover">
 		</button>
-		<img src="/images/logo.png" class="h-8">
-		<button class="text-2xl text-gray-300">
+		<router-link to="/">
+			<img src="/images/logo.png" class="h-8">
+		</router-link>
+		<router-link to="/matches" class="text-2xl text-gray-300">
 			<i class="fa-solid fa-comment"></i>
-		</button>
+		</router-link>
 	</nav>
 </template>

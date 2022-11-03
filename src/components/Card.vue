@@ -45,8 +45,10 @@
 </script>
 
 <template>
-	<div class="absolute inset-0 touch-none" :class="{ transition }" @pointerdown="grab" :style="{ transform: `translate(${x}px, ${y}px) rotate(${rotation}deg)` }">
+	<div class="absolute inset-0 touch-none select-none" :class="{ transition }" @pointerdown="grab" :style="{ transform: `translate(${x}px, ${y}px) rotate(${rotation}deg)` }">
 		<img :src="card.photoURL" draggable="false" class="w-full h-full object-cover">
 		<h3 class="absolute bottom-4 left-4 text-white text-2xl font-bold drop-shadow">{{ card.displayName }}</h3>
+		<button class="absolute top-4 left-4 border-4 border-green-400 text-green-400 px-4 py-2 rounded-lg text-2xl font-bold -rotate-12 opacity-0" :class="{ transition }" :style="{ opacity: x / limit }">Like</button>
+		<button class="absolute top-4 right-4 border-4 border-red-400 text-red-400 px-4 py-2 rounded-lg text-2xl font-bold rotate-12 opacity-0" :class="{ transition }" :style="{ opacity: -x / limit }">Nope</button>
 	</div>
 </template>

@@ -1,12 +1,16 @@
 <script setup>
 	import Card from "../components/Card.vue"
+	import Match from "../components/Match.vue"
 	import { ref } from "vue"
 	import {
 		getFirestore,
 		collection,
 		getDocs,
 		query,
-		where
+		where,
+		doc,
+		setDoc,
+		getDoc
 	} from "firebase/firestore"
 	import { getAuth } from "firebase/auth"
 
@@ -20,11 +24,24 @@
 	const { uid } = getAuth().currentUser
 	const cards = ref(null)
 	const name = ref(null)
+	const show = ref(false)
+	const card = ref({})
 
 	let swipe = status => {
 		name.value = status
-		cards.value.pop()
+		card.value = cards.value.pop()
+
+		setDoc(doc(getFirestore(), `users/${uid}/${status}/${card.value.uid}`), card.value)
 	}
+
+	let like = e => {
+		getDoc(doc(getFirestore(), `users/${card.value.uid}/like/${uid}`))
+			.then(snapshot => show.value = snapshot.exists())
+			.catch(error => alert(error.message))
+			.finally(() => name.value = null)
+	}
+
+	let nope = e => name.value = null
 
 	getDocs(query(
 		collection(getFirestore(), "users"),
@@ -33,7 +50,7 @@
 </script>
 
 <template>
-	<transition-group tag="div" :name="name" @after-leave="name = null" class="relative">
+	<transition-group tag="div" :name="name" @after-leave="this[name]()" class="relative">
 		<div key="empty" class="grid place-items-center h-full text-gray-300">
 			<i class="fa-solid fa-smile text-[10rem]"></i>
 			<p>No more swipes today!</p>
@@ -57,6 +74,7 @@
 			<i class="fa-solid fa-bolt"></i>
 		</button>
 	</div>
+	<match v-show="show" @close="show = false" :card="card"></match>
 </template>
 
 <style scoped>
