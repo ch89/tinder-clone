@@ -20,14 +20,9 @@
 		const cred = await signInWithPopup(getAuth(), new GoogleAuthProvider)
 
 		if(getAdditionalUserInfo(cred).isNewUser) {
-			console.log("New user =)")
-
 			const { uid, displayName, photoURL } = cred.user
 
 			setDoc(doc(getFirestore(), `users/${uid}`), { uid, displayName, photoURL })
-		}
-		else {
-			console.log("Old user =(")
 		}
 	}
 

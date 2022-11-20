@@ -10,17 +10,12 @@
 		where,
 		doc,
 		setDoc,
-		getDoc
+		getDoc,
+		addDoc,
+		serverTimestamp
 	} from "firebase/firestore"
 	import { getAuth } from "firebase/auth"
 
-	// const cards = ref([
-	// 	{ id: 1, name: "Misse", age: 3, photo: "/images/cat1.jpg" },
-	// 	{ id: 2, name: "Fluffy", age: 7, photo: "/images/cat2.jpg" },
-	// 	{ id: 3, name: "Pelle", age: 5, photo: "/images/cat3.jpg" },
-	// 	{ id: 4, name: "Kissen", age: 12, photo: "/images/cat4.jpg" },
-	// 	{ id: 5, name: "Molly", age: 9, photo: "/images/cat5.jpg" },
-	// ])
 	const { uid } = getAuth().currentUser
 	const cards = ref(null)
 	const name = ref(null)
@@ -36,17 +31,32 @@
 
 	let like = e => {
 		getDoc(doc(getFirestore(), `users/${card.value.uid}/like/${uid}`))
-			.then(snapshot => show.value = snapshot.exists())
+			.then(snapshot => {
+				if(snapshot.exists()) {
+					show.value = true
+
+					addDoc(collection(getFirestore(), "chats"), {
+						uids: [uid, card.value.uid],
+						timestamp: serverTimestamp()
+					})
+				}
+			})
 			.catch(error => alert(error.message))
 			.finally(() => name.value = null)
 	}
 
 	let nope = e => name.value = null
 
-	getDocs(query(
-		collection(getFirestore(), "users"),
-		where("uid", "!=", uid)
-	)).then(snapshot => cards.value = snapshot.docs.map(doc => doc.data()))
+	getDocs(collection(getFirestore(), `users/${uid}/like`))
+		.then(snapshot => {
+			const uids = snapshot.docs.map(doc => doc.id)
+
+			return getDocs(query(
+				collection(getFirestore(), "users"),
+				where("uid", "not-in", [uid, ...uids])
+			))
+		})
+		.then(snapshot => cards.value = snapshot.docs.map(doc => doc.data()))
 </script>
 
 <template>

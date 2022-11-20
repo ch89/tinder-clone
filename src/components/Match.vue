@@ -8,12 +8,12 @@
 
 <template>
 	<transition enter-from-class="opacity-0" leave-to-class="opacity-0">
-		<div class="absolute inset-0 z-10 bg-black/50 backdrop-blur-sm grid grid-cols-2 content-center gap-8 px-8 transition select-none">
+		<div @click="$emit('close')" class="absolute inset-0 z-10 bg-black/50 backdrop-blur-sm grid grid-cols-2 content-center gap-8 px-8 transition select-none text-center">
 			<img src="/images/match.webp" class="col-span-2">
-			<p class="col-span-2 text-white text-center">You and {{ card.displayName }} have liked each other!</p>
+			<p class="col-span-2 text-white">You and {{ card.displayName }} have liked each other!</p>
 			<img class="w-full aspect-square object-cover rounded-full border-4 border-white" :src="photoURL">
 			<img class="w-full aspect-square object-cover rounded-full border-4 border-white" :src="card.photoURL">
-			<button @click="$emit('close')" class="tinder-btn col-span-2">Send Message</button>
+			<router-link to="/matches" class="tinder-btn col-span-2">Send Message</router-link>
 		</div>
 	</transition>
 </template>
